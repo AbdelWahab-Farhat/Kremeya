@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
@@ -15,9 +14,12 @@ class CityResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            "id" => $this->id,
-            "name" => $this->name,
-            "regions" => RegionResource::collection($this->whenLoaded('regions')),
+            "id"          => $this->id,
+            "name"        => $this->name,
+            "is_required" => $this->is_required,
+            "is_active"   => $this->is_active,
+            "regions"     => RegionResource::collection($this->whenLoaded('regions')),
+            'created_at'  => $this->created_at->format('Y-m-d H:i:s'),
         ];
     }
 }

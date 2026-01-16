@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateCustomerRequest;
@@ -14,7 +13,8 @@ class CustomerController extends Controller
 {
     use ApiResponse;
 
-    public function __construct(private readonly CustomerService $service) {}
+    public function __construct(private readonly CustomerService $service)
+    {}
 
     public function index(Request $request)
     {
@@ -51,5 +51,12 @@ class CustomerController extends Controller
     public function logs(Customer $customer)
     {
         return \App\Http\Resources\LogResource::collection($customer->logs);
+    }
+
+    public function getOrders(Customer $customer, Request $request)
+    {
+        $filters = $request->only(['status']);
+        $orders  = $this->service->getOrders($customer, $filters);
+        return $this->success(\App\Http\Resources\OrderResource::collection($orders), 'Customer orders fetched successfully');
     }
 }

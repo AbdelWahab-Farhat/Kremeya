@@ -6,9 +6,9 @@ use App\Enums\UserRoles;
 use App\Http\Resources\CustomerResource;
 use App\Models\Customer;
 use App\Models\User;
-use Hash;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class CustomerService
 {
@@ -107,5 +107,16 @@ class CustomerService
     public function getCustomerLogs(Customer $customer)
     {
         return $customer->logs()->latest()->get();
+    }
+
+    public function getOrders(Customer $customer, array $filters = [])
+    {
+        $query = $customer->orders();
+
+        if (! empty($filters['status'])) {
+            $query->where('status', $filters['status']);
+        }
+
+        return $query->latest()->get();
     }
 }

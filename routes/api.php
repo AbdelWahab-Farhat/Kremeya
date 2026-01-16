@@ -40,6 +40,8 @@ Route::prefix('v1')->group(function () {
         Route::get('products/{product}/logs', [ProductContoller::class, 'logs'])->middleware('role:admin');
         Route::get('orders/{order}/logs', [OrderController::class, 'logs'])->middleware('role:admin|employee');
 
+        Route::get('customers/{customer}/orders', [CustomerController::class, 'getOrders'])->middleware('role:admin|employee');
+
         // Cart (nested under customer)
         Route::middleware('role:admin|employee')->group(function () {
             Route::get('customers/{customer}/cart', [CartController::class, 'show']);
@@ -51,5 +53,12 @@ Route::prefix('v1')->group(function () {
         // Performance
         Route::get('performance', [PerformanceController::class, 'index'])
             ->middleware('role:admin|employee');
+
+        // General
+        Route::get('enums/order-status', [\App\Http\Controllers\Api\GeneralController::class, 'orderStatus']);
+
+        // Cities & Regions
+        Route::apiResource('cities', \App\Http\Controllers\Api\CityController::class)->middleware('role:admin|employee');
+        Route::apiResource('regions', \App\Http\Controllers\Api\RegionController::class)->middleware('role:admin|employee');
     });
 });
