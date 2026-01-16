@@ -10,7 +10,7 @@ class Employee extends Model
     ];
 
     protected $casts = [
-        'salary' => 'decimal',
+        'salary' => 'decimal:2',
     ];
 
     public function user()

@@ -25,7 +25,8 @@ class AuthController extends Controller
         $user = $data['user'];
 
         return $this->success(
-            $this->buildAuthPayload($user, $data['token'])
+            $this->buildAuthPayload($user, $data['token']),
+            __('messages.welcome')
         );
     }
 
@@ -71,9 +72,7 @@ class AuthController extends Controller
         // Logout current token only
         $user->currentAccessToken()?->delete();
 
-        return $this->success([
-            'message' => 'Logged out successfully',
-        ]);
+        return $this->success(null, __('messages.success'));
     }
 
     public function webLogin(Request $request)

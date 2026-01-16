@@ -17,17 +17,22 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        $user = User::factory()->create([
-            'name'     => 'Abdelwahab Farhat',
-            'email'    => 'abdelwahab.dev@gmail.com',
-            'password' => 'passItUp',
-            'phone'    => '0944909852',
-        ]);
+        $user = User::firstOrCreate(
+            ['email' => 'abdelwahab.dev@gmail.com'],
+            [
+                'name'     => 'Abdelwahab Farhat',
+                'password' => 'passItUp',
+                'phone'    => '0944909852',
+            ]
+        );
 
         $this->call([
             CitiesSeeder::class,
             RegionsSeeder::class,
             RolesAndPermissionsSeeder::class,
+            ProductSeeder::class,
+            CustomerSeeder::class,
+            EmployeeSeeder::class,
         ]);
 
         $user->assignRole(UserRoles::ADMIN->value);
