@@ -31,7 +31,7 @@ class EmployeeSeeder extends Seeder
                 // Using instance method as user_id might not be fillable
                 $employee          = new Employee();
                 $employee->user_id = $user->id;
-                $employee->salary  = 1500 + ($i * 100);
+                $employee->salary  = 1500 + $i * 100;
                 $employee->save();
             }
         }

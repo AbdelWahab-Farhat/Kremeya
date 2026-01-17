@@ -20,7 +20,7 @@ return new class extends Migration
             $table->decimal('buying_price', 8, 2)->nullable();
             $table->boolean('is_active')->default(true);
             $table->string('currency', 10)->default('LYD');
-
+            $table->unsignedInteger('stock');
             $table->softDeletes();
             $table->timestamps();
             $table->index('name');

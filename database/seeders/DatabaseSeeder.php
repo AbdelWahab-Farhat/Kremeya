@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
             ProductSeeder::class,
             CustomerSeeder::class,
             EmployeeSeeder::class,
+            CouponSeeder::class
         ]);
 
         $user->assignRole(UserRoles::ADMIN->value);

@@ -20,6 +20,7 @@ class ProductSeeder extends Seeder
                     'selling_price' => rand(100, 500) + 0.99,
                     'buying_price'  => rand(50, 90) + 0.50,
                     'is_active'     => true,
+                    'stock'         => rand(10, 100),
                 ]
             );
         }

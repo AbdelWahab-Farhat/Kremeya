@@ -18,6 +18,7 @@ class CreateProductRequest extends FormRequest
             'selling_price' => ['required', 'numeric', 'gte:0', 'lte:999999.99'],
             'buying_price'  => ['required', 'numeric', 'gte:0', 'lte:999999.99'],
             'is_active'     => ['sometimes', 'boolean'],
+            'stock'         => ['required', 'integer', 'min:0'],
             'images'        => ['required', 'array', 'min:1', 'max:10'],
             'images.*'      => ['image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
         ];
@@ -31,6 +32,7 @@ class CreateProductRequest extends FormRequest
             'selling_price' => 'سعر البيع',
             'buying_price'  => 'سعر الشراء',
             'is_active'     => 'حالة التفعيل',
+            'stock'         => 'المخزون',
             'images'        => 'صور المنتج',
             'images.*'      => 'صورة المنتج',
         ];
@@ -55,6 +57,11 @@ class CreateProductRequest extends FormRequest
             'buying_price.lte'       => 'حقل :attribute يجب ألا يتجاوز :value.',
             'buying_price.required'  => 'حقل :attribute مطلوب.',
             'is_active.boolean'      => 'حقل :attribute يجب أن يكون نعم/لا (true/false) أو 1/0.',
+
+            'stock.required'         => 'حقل :attribute مطلوب.',
+            'stock.integer'          => 'حقل :attribute يجب أن يكون رقمًا صحيحًا.',
+            'stock.min'              => 'حقل :attribute يجب أن يكون :min أو أكثر.',
+
             'images.required'        => 'حقل :attribute مطلوب.',
             'images.array'           => 'حقل :attribute يجب أن يكون مصفوفة',
             'images.min'             => 'يجب تحميل على الأقل صورة واحدة في حقل :attribute.',

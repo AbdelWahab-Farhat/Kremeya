@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
@@ -15,14 +14,18 @@ class CustomerResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'        => $this->id,
-            'phone'     => $this->user->phone ?? null,
-            'name'      => $this->user->name ?? null,
-            'city'      => $this->city->name ?? null,
-            'region'    => $this->region->name ?? null,
-            'gender'    => $this->gender,
-            'created_at'=> $this->created_at,
-            'updated_at'=> $this->updated_at,
+            'id'         => $this->id,
+            'phone'      => $this->user->phone ?? null,
+            'name'       => $this->user->name ?? null,
+            'city'       => $this->city->name ?? null,
+            'region'     => $this->region->name ?? null,
+            'gender'     => $this->gender,
+            'wallet'     => $this->whenLoaded('wallet', fn() => [
+                'id'      => $this->wallet->id,
+                'balance' => (float) $this->wallet->balance,
+            ]),
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
 
         ];
     }

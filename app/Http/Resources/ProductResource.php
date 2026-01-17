@@ -18,14 +18,16 @@ class ProductResource extends JsonResource
             'sku'           => $this->sku,
             'name'          => $this->name,
             'description'   => $this->description,
-            'selling_price' => (double)$this->selling_price,
-            'buying_price'  => (double)$this->buying_price,
+            'selling_price' => (double) $this->selling_price,
+            'buying_price'  => (double) $this->buying_price,
             'is_active'     => $this->is_active,
+            'stock'         => $this->stock,
+            'unavailable'   => $this->stock <= 0,
             'created_at'    => $this->created_at,
             'updated_at'    => $this->updated_at,
             'images'        => $this->whenLoaded(
                 'images',
-                fn () => ImageResource::collection($this->images),
+                fn() => ImageResource::collection($this->images),
                 []
             ),
         ];

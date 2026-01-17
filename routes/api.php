@@ -68,5 +68,17 @@ Route::prefix('v1')->group(function () {
         // Cities & Regions
         Route::apiResource('cities', \App\Http\Controllers\Api\CityController::class)->middleware('role:admin|employee');
         Route::apiResource('regions', \App\Http\Controllers\Api\RegionController::class)->middleware('role:admin|employee');
+
+        // Wallets
+        Route::middleware('role:admin|employee')->group(function () {
+            Route::get('customers/{customer}/wallet', [\App\Http\Controllers\Api\WalletController::class, 'customerWallet']);
+            Route::get('customers/{customer}/wallet/transactions', [\App\Http\Controllers\Api\WalletController::class, 'customerTransactions']);
+        });
+
+        Route::middleware('role:admin')->group(function () {
+            Route::get('wallets', [\App\Http\Controllers\Api\WalletController::class, 'index']);
+            Route::get('wallets/transactions', [\App\Http\Controllers\Api\WalletController::class, 'transactions']);
+            Route::post('customers/{customer}/wallet/transact', [\App\Http\Controllers\Api\WalletController::class, 'transact']);
+        });
     });
 });

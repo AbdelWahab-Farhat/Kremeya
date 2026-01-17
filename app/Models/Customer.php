@@ -66,4 +66,8 @@ class Customer extends Model
         return $this->hasOne(Cart::class);
     }
 
+    public function wallet()
+    {
+        return $this->hasOne(Wallet::class);
+    }
 }

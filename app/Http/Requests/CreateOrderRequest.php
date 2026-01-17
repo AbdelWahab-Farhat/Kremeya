@@ -1,10 +1,10 @@
 <?php
-
 namespace App\Http\Requests;
 
+use App\Enums\OrderStatus;
+use App\Enums\PaymentMethod;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use App\Enums\OrderStatus;
 
 class CreateOrderRequest extends FormRequest
 {
@@ -24,11 +24,12 @@ class CreateOrderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'customer_id' => ['required', 'exists:customers,id'],
-            'status' => ['nullable', Rule::enum(OrderStatus::class)],
-            'notes' => ['nullable', 'string'],
-            'region_id' => ['nullable', 'exists:regions,id'],
-            'city_id' => ['required', 'exists:cities,id'],
+            'customer_id'    => ['required', 'exists:customers,id'],
+            'status'         => ['nullable', Rule::enum(OrderStatus::class)],
+            'payment_method' => ['required', Rule::enum(PaymentMethod::class)],
+            'notes'          => ['nullable', 'string'],
+            'region_id'      => ['nullable', 'exists:regions,id'],
+            'city_id'        => ['required', 'exists:cities,id'],
         ];
     }
 }

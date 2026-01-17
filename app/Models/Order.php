@@ -2,6 +2,7 @@
 namespace App\Models;
 
 use App\Enums\OrderStatus;
+use App\Enums\PaymentMethod;
 use App\Models\Concerns\HasActivityLogs;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -12,8 +13,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Order extends Model
 {
     use HasFactory, SoftDeletes, HasActivityLogs;
-
-
 
     protected static function booted()
     {
@@ -29,13 +28,15 @@ class Order extends Model
         'order_code',
         'customer_id',
         'status',
+        'payment_method',
         'notes',
         'region_id',
         'city_id',
     ];
 
     protected $casts = [
-        'status' => OrderStatus::class,
+        'status'         => OrderStatus::class,
+        'payment_method' => PaymentMethod::class,
     ];
 
     public function customer(): BelongsTo
@@ -52,8 +53,6 @@ class Order extends Model
     {
         return $this->belongsTo(City::class);
     }
-
-
 
     public function products(): BelongsToMany
     {
