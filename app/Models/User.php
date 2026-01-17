@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -13,13 +12,13 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable , HasRoles , HasApiTokens , HasActivityLogs;
+    use HasFactory, Notifiable, HasRoles, HasApiTokens, HasActivityLogs;
 
     public function customer()
     {
         return $this->hasOne(Customer::class);
     }
-        public function employee()
+    public function employee()
     {
         return $this->hasOne(Employee::class);
     }
@@ -55,9 +54,8 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'password'          => 'hashed',
         ];
     }
-
 
 }
