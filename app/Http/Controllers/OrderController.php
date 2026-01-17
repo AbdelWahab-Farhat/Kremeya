@@ -68,8 +68,11 @@ class OrderController extends Controller
      */
     public function destroy(Order $order)
     {
-        if (! auth()->user()->hasRole(UserRoles::ADMIN->value)) {
-            $this->error('Only Access For Admin', 403);
+        /** @var \App\Models\User $user */
+        $user = \Illuminate\Support\Facades\Auth::user();
+
+        if (! $user->hasRole(UserRoles::ADMIN->value)) {
+            return $this->error('Only Access For Admin', 403);
         }
         $this->service->delete($order);
         return $this->success(null, 'Order deleted successfully');

@@ -70,7 +70,9 @@ class AuthController extends Controller
         $user = $request->user();
 
         // Logout current token only
-        $user->currentAccessToken()?->delete();
+        /** @var \Laravel\Sanctum\PersonalAccessToken $token */
+        $token = $user->currentAccessTokenen();
+        $token?->delete();
 
         return $this->success(null, __('messages.success'));
     }
