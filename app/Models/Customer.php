@@ -1,19 +1,16 @@
 <?php
-
 namespace App\Models;
 
 use App\Enums\Gender;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Models\Concerns\HasActivityLogs;
-use Str;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Str;
 
 class Customer extends Model
 {
     use HasFactory, HasActivityLogs;
-
-
 
     protected $fillable = [
         'user_id',
@@ -23,7 +20,7 @@ class Customer extends Model
     ];
 
     protected $casts = [
-        'gender' => Gender::class, // يرجّع Gender enum بدل string
+        'gender'    => Gender::class, // يرجّع Gender enum بدل string
         'is_active' => 'boolean',
     ];
 
@@ -39,20 +36,19 @@ class Customer extends Model
             }
         });
 
-        static::created(function(Customer $customer ) {
-                $customer->customer_code =  'C' . $customer->id;
-                $customer->saveQuietly();
+        static::created(function (Customer $customer) {
+            $customer->customer_code = 'C' . $customer->id;
+            $customer->saveQuietly();
         });
     }
-
-
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function orders() {
+    public function orders()
+    {
         return $this->hasMany(Order::class);
     }
 
@@ -65,9 +61,9 @@ class Customer extends Model
         return $this->belongsTo(City::class);
     }
 
-    public function cart()  {
+    public function cart()
+    {
         return $this->hasOne(Cart::class);
     }
-
 
 }

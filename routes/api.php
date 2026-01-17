@@ -53,9 +53,17 @@ Route::prefix('v1')->group(function () {
         // Performance
         Route::get('performance', [PerformanceController::class, 'index'])
             ->middleware('role:admin|employee');
+        Route::get('performance/export', [PerformanceController::class, 'export'])
+            ->middleware('role:admin|employee');
 
         // General
         Route::get('enums/order-status', [\App\Http\Controllers\Api\GeneralController::class, 'orderStatus']);
+
+        // Coupons
+        Route::post('coupons/verify', [\App\Http\Controllers\Api\CouponController::class, 'verify'])
+            ->middleware('role:admin|employee');
+        Route::apiResource('coupons', \App\Http\Controllers\Api\CouponController::class)
+            ->middleware('role:admin');
 
         // Cities & Regions
         Route::apiResource('cities', \App\Http\Controllers\Api\CityController::class)->middleware('role:admin|employee');

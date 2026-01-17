@@ -16,6 +16,26 @@ class PerformanceController extends Controller
     }
 
     /**
+     * Export performance report.
+     */
+    public function export(Request $request)
+    {
+        $data = [
+            'overview' => $this->performanceService->getOverviewStats(),
+            'charts'   => [
+                'sales_last_7_days' => $this->performanceService->getSalesChart(7),
+                'orders_by_status'  => $this->performanceService->getOrdersByStatus(),
+            ],
+            'lists'    => [
+                'top_products'  => $this->performanceService->getTopSellingProducts(),
+                'recent_orders' => $this->performanceService->getRecentOrders(),
+            ],
+        ];
+
+        return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\PerformanceExport($data), 'performance_report.xlsx');
+    }
+
+    /**
      * Get performance dashboard data.
      */
     public function index(Request $request): JsonResponse
