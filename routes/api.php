@@ -1,6 +1,12 @@
 <?php
 
+use App\Http\Controllers\Api\CityController;
+use App\Http\Controllers\Api\CouponController;
+use App\Http\Controllers\Api\DarbAssabilController;
+use App\Http\Controllers\Api\GeneralController;
 use App\Http\Controllers\Api\PerformanceController;
+use App\Http\Controllers\Api\RegionController;
+use App\Http\Controllers\Api\WalletController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CustomerController;
@@ -57,28 +63,37 @@ Route::prefix('v1')->group(function () {
             ->middleware('role:admin|employee');
 
         // General
-        Route::get('enums/order-status', [\App\Http\Controllers\Api\GeneralController::class, 'orderStatus']);
+        Route::get('enums/order-status', [GeneralController::class, 'orderStatus']);
 
         // Coupons
-        Route::post('coupons/verify', [\App\Http\Controllers\Api\CouponController::class, 'verify'])
+        Route::post('coupons/verify', [CouponController::class, 'verify'])
             ->middleware('role:admin|employee');
-        Route::apiResource('coupons', \App\Http\Controllers\Api\CouponController::class)
+        Route::apiResource('coupons', CouponController::class)
             ->middleware('role:admin');
 
         // Cities & Regions
-        Route::apiResource('cities', \App\Http\Controllers\Api\CityController::class)->middleware('role:admin|employee');
-        Route::apiResource('regions', \App\Http\Controllers\Api\RegionController::class)->middleware('role:admin|employee');
+        Route::apiResource('cities', CityController::class)->middleware('role:admin|employee');
+        Route::apiResource('regions', RegionController::class)->middleware('role:admin|employee');
 
         // Wallets
         Route::middleware('role:admin|employee')->group(function () {
-            Route::get('customers/{customer}/wallet', [\App\Http\Controllers\Api\WalletController::class, 'customerWallet']);
-            Route::get('customers/{customer}/wallet/transactions', [\App\Http\Controllers\Api\WalletController::class, 'customerTransactions']);
+            Route::get('customers/{customer}/wallet', [WalletController::class, 'customerWallet']);
+            Route::get('customers/{customer}/wallet/transactions', [WalletController::class, 'customerTransactions']);
         });
 
         Route::middleware('role:admin')->group(function () {
-            Route::get('wallets', [\App\Http\Controllers\Api\WalletController::class, 'index']);
-            Route::get('wallets/transactions', [\App\Http\Controllers\Api\WalletController::class, 'transactions']);
-            Route::post('customers/{customer}/wallet/transact', [\App\Http\Controllers\Api\WalletController::class, 'transact']);
+            Route::get('wallets', [WalletController::class, 'index']);
+            Route::get('wallets/transactions', [WalletController::class, 'transactions']);
+            Route::post('customers/{customer}/wallet/transact', [WalletController::class, 'transact']);
+        });
+
+        // Darb Assabil Shipping
+        Route::middleware('role:admin|employee')->group(function () {
+            Route::get('darb-shipments', [DarbAssabilController::class, 'index']);
+            Route::post('orders/{order}/darb-shipment', [DarbAssabilController::class, 'createShipment']);
+            Route::get('darb-shipments/local/{shipment}', [DarbAssabilController::class, 'showLocalShipment']);
+            Route::post('darb-shipments/{shipment}/sync', [DarbAssabilController::class, 'syncStatus']);
+            Route::delete('darb-shipments/{shipment}', [DarbAssabilController::class, 'cancelShipment']);
         });
     });
 });

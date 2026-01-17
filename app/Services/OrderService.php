@@ -23,7 +23,7 @@ class OrderService
     public function getAll(array $filters = [], int $perPage = 15)
     {
         return Order::query()
-            ->with(['customer', 'products'])
+            ->with(['customer', 'products', 'darbAssabilShipment'])
             ->when(isset($filters['search']), function (Builder $query) use ($filters) {
                 $query->where('order_code', 'like', '%' . $filters['search'] . '%')
                     ->orWhereHas('customer', function ($q) use ($filters) {

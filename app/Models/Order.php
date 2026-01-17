@@ -19,7 +19,7 @@ class Order extends Model
         static::created(function (Order $order) {
             if (empty($order->order_code)) {
                 $order->order_code = 'O' . $order->id;
-                $order->saveQuietly(); // بدون ما يشغل observers/loops
+                $order->saveQuietly();
             }
         });
     }
@@ -68,5 +68,10 @@ class Order extends Model
             $unit = (float) ($p->pivot->unit_price ?? 0);
             return $qty * $unit;
         });
+    }
+
+    public function darbAssabilShipment(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(DarbAssabilShipment::class);
     }
 }

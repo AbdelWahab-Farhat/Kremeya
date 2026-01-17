@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Enums\UserRoles;
@@ -16,7 +15,8 @@ class OrderController extends Controller
 {
     use ApiResponse;
 
-    public function __construct(private readonly OrderService $service) {
+    public function __construct(private readonly OrderService $service)
+    {
 
     }
 
@@ -51,7 +51,7 @@ class OrderController extends Controller
      */
     public function show(Order $order)
     {
-        return $this->success(new OrderResource($order->load(['customer', 'products'])));
+        return $this->success(new OrderResource($order->load(['customer', 'products', 'darbAssabilShipment'])));
     }
 
     /**
@@ -68,8 +68,8 @@ class OrderController extends Controller
      */
     public function destroy(Order $order)
     {
-        if(!auth()->user()->hasRole(UserRoles::ADMIN->value)) {
-            $this->error('Only Access For Admin',403);
+        if (! auth()->user()->hasRole(UserRoles::ADMIN->value)) {
+            $this->error('Only Access For Admin', 403);
         }
         $this->service->delete($order);
         return $this->success(null, 'Order deleted successfully');
@@ -78,7 +78,7 @@ class OrderController extends Controller
     public function restore($id)
     {
         $order = $this->service->restore($id);
-        if (!$order) {
+        if (! $order) {
             return $this->error('Order not found or not deleted', 404);
         }
 
