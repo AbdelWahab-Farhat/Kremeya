@@ -30,7 +30,7 @@ class OrderController extends Controller
 
         $resource = $this->service->getAll($filters, $perPage);
 
-        return $this->success(OrderResource::collection($resource));
+        return $this->paginatedSuccess($resource, OrderResource::class);
     }
 
     /**

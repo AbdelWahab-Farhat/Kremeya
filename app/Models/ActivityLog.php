@@ -1,7 +1,7 @@
 <?php
-
 namespace App\Models;
 
+use App\Enums\Action;
 use Illuminate\Database\Eloquent\Model;
 
 class ActivityLog extends Model
@@ -14,7 +14,8 @@ class ActivityLog extends Model
     ];
 
     protected $casts = [
-        'data' => 'array',
+        'data'   => 'array',
+        'action' => Action::class,
     ];
 
     public function loggable()

@@ -20,7 +20,7 @@ class CartService
             ]);
         }
 
-        // ✅ Validate products exist (avoid SQL FK error)
+
         $productIds = array_keys($items);
 
         $existingIds = Product::query()

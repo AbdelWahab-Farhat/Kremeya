@@ -22,7 +22,7 @@ class CityController extends Controller
         $perPage  = (int) $request->get('per_page', 15);
         $resource = $this->service->getAll($perPage);
 
-        return $this->success(CityResource::collection($resource));
+        return $this->paginatedSuccess($resource, CityResource::class);
     }
 
     public function store(CreateCityRequest $request)

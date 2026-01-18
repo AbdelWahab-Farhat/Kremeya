@@ -18,7 +18,7 @@ class EnsureUserIsActive
     {
         $user = $request->user();
         if ($user &&  !$user->is_active) {
-            return $this->success(null,
+            return $this->error(
                 'Account is not active , Please Connected The Support For More Infomation',
                 403
             );

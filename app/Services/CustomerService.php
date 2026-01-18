@@ -6,13 +6,13 @@ use App\Enums\UserRoles;
 use App\Http\Resources\CustomerResource;
 use App\Models\Customer;
 use App\Models\User;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class CustomerService
 {
-    public function getAll(array $filters = [], int $perPage = 15): AnonymousResourceCollection
+    public function getAll(array $filters = [], int $perPage = 15): LengthAwarePaginator
     {
         $query = Customer::query()->with(['user', 'region', 'city']);
 
@@ -41,7 +41,7 @@ class CustomerService
             $query->where('user_id', $filters['user_id']);
         }
 
-        return CustomerResource::collection($query->latest()->paginate($perPage));
+        return $query->latest()->paginate($perPage);
     }
 
     public function create(array $validated)
@@ -62,9 +62,14 @@ class CustomerService
             return $user->customer()->create([
                 'city_id'   => $validated['city_id'] ?? null,
                 'region_id' => $validated['region_id'] ?? null,
-                'gender'    => $validated['gender'] ?? Gender::OTHER->value,
+                'gender'    => $validated['gender'] ?? Gender::UNKOWN->value,
             ]);
         });
+
+        // Dispatch AI gender prediction job if gender was not provided
+        if (empty($validated['gender'])) {
+            \App\Jobs\PredictCustomerGenderJob::dispatch($customer);
+        }
 
         return $customer;
     }
@@ -94,6 +99,7 @@ class CustomerService
             $customer->update([
                 'phone'     => $validated['phone'] ?? $customer->phone,
                 'city_id'   => $validated['city_id'] ?? $customer->city_id,
+                // Could be null
                 'region_id' => $validated['region_id'],
                 'gender'    => $validated['gender'] ?? $customer->gender,
             ]);

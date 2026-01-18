@@ -23,7 +23,7 @@ class EmployeeController extends Controller
 
         $resource = $this->service->getAll($filters, $perPage);
 
-        return $this->success(EmployeeResource::collection($resource), 'Employees fetched successfully');
+        return $this->paginatedSuccess($resource, EmployeeResource::class, 'Employees fetched successfully');
     }
 
     public function store(CreateEmployeeRequest $request)

@@ -1,7 +1,7 @@
 <?php
-
 namespace App\Http\Traits;
 
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\JsonResponse;
 
 trait ApiResponse
@@ -17,15 +17,43 @@ trait ApiResponse
             'message' => $message,
         ];
 
-        if (!is_null($data)) {
+        if (! is_null($data)) {
             $payload['data'] = $data;
         }
 
-        if (!empty($meta)) {
+        if (! empty($meta)) {
             $payload['meta'] = $meta;
         }
 
         return response()->json($payload, $status);
+    }
+
+    protected function paginatedSuccess(
+        LengthAwarePaginator $paginator,
+        string $resourceClass,
+        string $message = 'Success'
+    ): JsonResponse {
+        $payload = [
+            'status'  => true,
+            'message' => $message,
+            'data'    => $resourceClass::collection($paginator->items()),
+            'meta'    => [
+                'current_page' => $paginator->currentPage(),
+                'last_page'    => $paginator->lastPage(),
+                'per_page'     => $paginator->perPage(),
+                'total'        => $paginator->total(),
+                'from'         => $paginator->firstItem(),
+                'to'           => $paginator->lastItem(),
+            ],
+            'links'   => [
+                'first' => $paginator->url(1),
+                'last'  => $paginator->url($paginator->lastPage()),
+                'prev'  => $paginator->previousPageUrl(),
+                'next'  => $paginator->nextPageUrl(),
+            ],
+        ];
+
+        return response()->json($payload, 200);
     }
 
     protected function error(
@@ -39,11 +67,11 @@ trait ApiResponse
             'message' => $message,
         ];
 
-        if (!is_null($errors)) {
+        if (! is_null($errors)) {
             $payload['errors'] = $errors;
         }
 
-        if (!empty($meta)) {
+        if (! empty($meta)) {
             $payload['meta'] = $meta;
         }
 

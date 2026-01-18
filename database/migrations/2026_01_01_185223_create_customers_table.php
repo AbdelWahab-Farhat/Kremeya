@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string("customer_code")->unique();
             $table->foreignId('city_id')->nullable();
             $table->foreignId('region_id')->nullable();
-            $table->enum('gender', Gender::values())->default(Gender::OTHER->value);
+            $table->enum('gender', Gender::values())->default(Gender::UNKOWN->value);
         });
     }
 

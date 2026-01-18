@@ -22,7 +22,7 @@ class RegionController extends Controller
         $perPage  = (int) $request->get('per_page', 15);
         $resource = $this->service->getAll($perPage);
 
-        return $this->success(RegionResource::collection($resource));
+        return $this->paginatedSuccess($resource, RegionResource::class);
     }
 
     public function store(CreateRegionRequest $request)

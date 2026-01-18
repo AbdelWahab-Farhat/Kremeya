@@ -69,21 +69,15 @@ class EmployeeService
         });
     }
 
+    /**
+     * DO NOT USE IT (ABDELWAHAB FARHAT 2025-1-18)
+     * @deprecated
+     */
     public function delete(Employee $employee)
     {
         return DB::transaction(function () use ($employee) {
             $user = $employee->user;
-            $employee->delete(); // This might cascade delete user if configured, but safe to delete specific first if needed
-                                 // Based on migration: $table->foreignId('user_id')->constrained()->onDelete('cascade');
-                                 // Deleting Employee doesn't delete User automatically unless we want to.
-                                 // Usually if we delete an employee record, we might want to delete the user too or just the role?
-                                 // "CRUD for Employee" usually implies deleting the "Employee entity" which is the User+Employee data.
-                                 // Let's delete the user, which will cascade delete the employee record due to DB constraint (if user is deleted).
-                                 // But wait, the constraint is on `employee` table: `user_id` references `users`.
-                                 // So deleting `users` deletes `employee`.
-                                 // Deleting `employee` does NOT delete `users`.
-
-            // Should we delete the User account? Yes, usually for "Employee CRUD".
+            $employee->delete();
             $user->delete();
 
             return true;

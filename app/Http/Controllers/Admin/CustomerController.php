@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
@@ -21,8 +20,8 @@ class CustomerController extends Controller
         return view('admin.customers.create');
     }
 
-    public function store(Request $request) {
-        // Validation and creation logic would go here
-        // For this step I'll focus on listing first as per "beautiful custom UI" request
+    public function store(Request $request)
+    {
+        // Validation and creation logic would go here GUYSSS
     }
 }

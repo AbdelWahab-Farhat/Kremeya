@@ -2,6 +2,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CreateCouponRequest;
+use App\Http\Requests\UpdateCouponRequest;
 use App\Http\Resources\CouponResource;
 use App\Http\Traits\ApiResponse;
 use App\Models\Coupon;
@@ -22,21 +24,13 @@ class CouponController extends Controller
 
         $coupons = $this->service->getAll($filters, $perPage);
 
-        return $this->success(CouponResource::collection($coupons), 'Coupons fetched successfully');
+        return $this->paginatedSuccess($coupons, CouponResource::class, 'Coupons fetched successfully');
     }
 
-    public function store(Request $request)
+    public function store(CreateCouponRequest $request)
     {
-        $validated = $request->validate([
-            'code'        => 'required|unique:coupons,code',
-            'value'       => 'required|numeric|min:0',
-            'type'        => 'required|in:fixed,percent',
-            'expiry_date' => 'nullable|date',
-            'usage_limit' => 'nullable|integer|min:1',
-        ]);
-
         try {
-            $coupon = $this->service->create($validated);
+            $coupon = $this->service->create($request->validated());
             return $this->success(new CouponResource($coupon), 'Coupon created successfully', 201);
         } catch (\Throwable $e) {
             return $this->error($e->getMessage(), 500);
@@ -48,19 +42,10 @@ class CouponController extends Controller
         return $this->success(new CouponResource($coupon), 'Coupon fetched successfully');
     }
 
-    public function update(Request $request, Coupon $coupon)
+    public function update(UpdateCouponRequest $request, Coupon $coupon)
     {
-        $validated = $request->validate([
-            'code'        => 'sometimes|unique:coupons,code,' . $coupon->id,
-            'value'       => 'sometimes|numeric|min:0',
-            'type'        => 'sometimes|in:fixed,percent',
-            'expiry_date' => 'nullable|date',
-            'usage_limit' => 'nullable|integer|min:1',
-            'is_active'   => 'sometimes|boolean',
-        ]);
-
         try {
-            $coupon = $this->service->update($coupon, $validated);
+            $coupon = $this->service->update($coupon, $request->validated());
             return $this->success(new CouponResource($coupon), 'Coupon updated successfully');
         } catch (\Throwable $e) {
             return $this->error($e->getMessage(), 500);

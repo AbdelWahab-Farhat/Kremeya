@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\Action;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -11,10 +12,10 @@ return new class extends Migration
         Schema::create('activity_logs', function (Blueprint $table) {
             $table->id();
 
-            $table->string('action');             // create / update / delete / ...
-            $table->text('message')->nullable();  // وصف
+            $table->enum('action', Action::values());
+            $table->text('message')->nullable(); // وصف
 
-            // بدل model + model_id
+                                        // بدل model + model_id
             $table->morphs('loggable');           // loggable_id + loggable_type + index
 
             $table->foreignId('user_id')
@@ -22,7 +23,7 @@ return new class extends Migration
                 ->constrained('users')
                 ->nullOnDelete();
 
-            $table->json('data')->nullable();     // before/after, metadata...
+            $table->json('data')->nullable(); // before/after, metadata...
 
             $table->timestamps();
 

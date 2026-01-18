@@ -22,7 +22,7 @@ class CustomerController extends Controller
 
         $resource = $this->service->getAll($request->all(), $perPage);
 
-        return $this->success($resource, 'Customers fetched successfully');
+        return $this->paginatedSuccess($resource, CustomerResource::class, 'Customers fetched successfully');
     }
 
     public function store(CreateCustomerRequest $request)
